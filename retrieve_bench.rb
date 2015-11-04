@@ -1,3 +1,4 @@
+#!/usr/bin/env ruby
 require 'concurrent'
 require 'httparty'
 require 'benchmark'
