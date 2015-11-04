@@ -8,6 +8,6 @@ Clone this repo and then do:
 
 ## Demonstration
 
-Run the entire script called 'future.rb':
+Run the entire benchmarking script:
 
-`$ ruby future.rb`
+`$ ./retrieve_bench.rb`
