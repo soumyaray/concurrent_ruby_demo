@@ -4,6 +4,10 @@ require 'http'
 require 'concurrent'
 require 'benchmark'
 
+sites = %w[cnn facebook google microsoft github]
+retrieve(sites)
+retrieve_concurrent(sites)
+
 def retrieve(sites)
   sites.map do |site|
     result = HTTP.follow.get("https://#{site}.com")
@@ -20,16 +24,14 @@ def retrieve_concurrent(sites)
       .then { |res| { site: site, code: res.status, body: res.body.to_s } }
       .rescue { { error: "#{site} could not be loaded" } }
       .execute
-  end.map(&:value)
+  end.map(&:value!)
 end
 
-def measurements
-  sites = %w[cnn facebook google microsoft github]
+sites = %w[cnn facebook google microsoft github]
 
-  Benchmark.measure { retrieve_concurrent(sites) }
+Benchmark.measure { retrieve_concurrent(sites) }
 
-  Benchmark.bm(10) do |bench|
-    bench.report('synchronous:') { retrieve(sites) }
-    bench.report('concurrent:') { retrieve_concurrent(sites) }
-  end
-end
+Benchmark.bm(10) do |bench|
+  bench.report('synchronous:') { retrieve(sites) }
+  bench.report('concurrent:') { retrieve_concurrent(sites) }
+end;
