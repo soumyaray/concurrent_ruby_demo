@@ -5,13 +5,13 @@ require 'concurrent'
 promise = Concurrent::Promise.execute do
   sleep(20)
   21 * 2
-end;
+end
 
-promise.state     # => pending
-promise.pending?  # => true
-promise.value     # => 42 (after waiting!)
+promise.state
+promise.pending?
+promise.value
 
-promise = Concurrent::Promise.execute { raise 'hell' }.rescue { 666 };
-promise.state     # => fulfilled
-promise.pending?  # => false
-promise.value     # => 666
+promise = Concurrent::Promise.execute { raise 'hell' }.rescue { 666 }
+promise.state
+promise.pending?
+promise.value

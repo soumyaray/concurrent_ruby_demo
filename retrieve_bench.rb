@@ -4,7 +4,7 @@ require 'http'
 require 'concurrent'
 require 'benchmark'
 
-sites = %w[cnn facebook google microsoft github]
+sites = %w[cnn facebook google github]
 retrieve(sites)
 retrieve_concurrent(sites)
 
@@ -27,11 +27,12 @@ def retrieve_concurrent(sites)
   end.map(&:value!)
 end
 
-sites = %w[cnn facebook google microsoft github]
+sites = %w[cnn facebook google github]
 
+Benchmark.measure { retrieve(sites) }
 Benchmark.measure { retrieve_concurrent(sites) }
 
 Benchmark.bm(10) do |bench|
   bench.report('synchronous:') { retrieve(sites) }
   bench.report('concurrent:') { retrieve_concurrent(sites) }
-end;
+end
