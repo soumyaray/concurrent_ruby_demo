@@ -10,6 +10,7 @@ end
 promise.state
 promise.pending?
 promise.value
+promise.fulfilled?
 
 promise = Concurrent::Promise.execute { raise 'hell' }.rescue { 666 }
 promise.state
