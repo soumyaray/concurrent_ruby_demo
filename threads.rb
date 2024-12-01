@@ -1,9 +1,8 @@
 class BankAccount
-  attr_accessor :balance, :half
+  attr_accessor :balance
 
   def initialize(starting_balance=0)
     @balance = starting_balance
-    @half = @balance / 2
   end
 
   def debit(amount)
@@ -28,37 +27,41 @@ iterate = 200
 total = thread_count * iterate
 
 ## Synchronous crediting
-account = BankAccount.new(0)
-puts "Starting balance is #{account.balance}."
+account1 = BankAccount.new(total)
+account2 = BankAccount.new(0)
+puts "Account 1 starting balance is #{account1.balance}."
+puts "Account 2 starting balance is #{account2.balance}."
 
-puts "Crediting account using a single thread, #{total} times."
-total.times do
-  account.half += 1 if account.balance.even?
-  account.credit(1)
-  print '.' if account.balance % 100 == 0
+puts "Transferring funds using a single thread, #{total} times."
+total.times do |i|
+  account1.debit(1)
+  account2.credit(1)
+  print '.' if i % 100 == 0
 end
 
 puts
-puts "Account balance is now #{account.balance}."
-puts "Half balance is now #{account.half}."
+puts "Account 1 ending balance is #{account1.balance}."
+puts "Account 2 ending balance is #{account2.balance}."
 
 ## Multithreaded crediting
-account = BankAccount.new(0)
-puts "Starting balance is #{account.balance}."
+account1 = BankAccount.new(total)
+account2 = BankAccount.new(0)
+puts "Account 1 starting balance is #{account1.balance}."
+puts "Account 2 starting balance is #{account2.balance}."
 
-puts "Crediting account using #{thread_count} threads, #{iterate} times each."
+puts "Transferring funds using #{thread_count} threads, #{iterate} times each."
 require 'thread'
-threads = thread_count.times.map do
+threads = thread_count.times.map.with_index do |_, i|
   Thread.new do
     iterate.times do
-      account.half += 1 if account.balance.even?
-      account.credit(1)
-      print '.' if account.balance % 100 == 0
+      account1.debit(1)
+      account2.credit(1)
+      print '.' if i % 100 == 0
     end
   end
 end
 threads.each(&:join)
 
 puts
-puts "Account balance is now #{account.balance}."
-puts "Half balance is now #{account.half}."
+puts "Account 1 ending balance is #{account1.balance}."
+puts "Account 2 ending balance is #{account2.balance}."
