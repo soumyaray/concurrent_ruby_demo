@@ -12,7 +12,7 @@ promise.pending?
 promise.value
 promise.fulfilled?
 
-promise = Concurrent::Promise.execute { raise 'hell' }.rescue { 666 }
+promise = Concurrent::Promise.execute { raise 'hell' }.rescue { 'saved' }
 promise.state
 promise.pending?
 promise.value
