@@ -4,10 +4,6 @@ require 'http'
 require 'concurrent'
 require 'benchmark'
 
-sites = %w[cnn facebook google github]
-retrieve(sites)
-retrieve_concurrent(sites)
-
 def retrieve(sites)
   sites.map do |site|
     result = HTTP.follow.get("https://#{site}.com")
@@ -27,12 +23,18 @@ def retrieve_concurrent(sites)
   end.map(&:value!)
 end
 
+# Demonstration
+
 sites = %w[cnn facebook google github]
+retrieve(sites)
+retrieve_concurrent(sites)
+
+# Performance Comparison
 
 Benchmark.measure { retrieve(sites) }
 Benchmark.measure { retrieve_concurrent(sites) }
 
-Benchmark.bm(10) do |bench|
+Benchmark.bm(12) do |bench|
   bench.report('synchronous:') { retrieve(sites) }
   bench.report('concurrent:') { retrieve_concurrent(sites) }
-end
+end;
